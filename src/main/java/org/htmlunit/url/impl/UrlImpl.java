@@ -207,15 +207,11 @@ public class UrlImpl implements Url {
         if (host_ == null) {
             return "";
         }
-        if (port_ == null) {
-            final StringBuilder buffer = new StringBuilder();
-            SerializerHelper.serializeHost(host_, buffer);
-            return buffer.toString();
-        }
         final StringBuilder buffer = new StringBuilder();
         SerializerHelper.serializeHost(host_, buffer);
-        buffer.append(":");
-        buffer.append(SerializerHelper.serializeInteger(port_));
+        if (port_ != null) {
+            buffer.append(":").append(SerializerHelper.serializeInteger(port_));
+        }
         return buffer.toString();
     }
 
@@ -591,12 +587,9 @@ public class UrlImpl implements Url {
     @Override
     public UrlSearchParams searchParams() {
         if (searchParams_ == null) {
+            searchParams_ = new UrlSearchParamsImpl();
             if (query_ != null) {
-                searchParams_ = new UrlSearchParamsImpl();
                 searchParams_.init(query_);
-            }
-            else {
-                searchParams_ = new UrlSearchParamsImpl();
             }
         }
         return searchParams_;
@@ -661,10 +654,10 @@ public class UrlImpl implements Url {
     }
 
     void usernamePasswordHostPort(final UrlImpl url) {
-        this.username_ = url.username_;
-        this.password_ = url.password_;
-        this.host_ = url.host_;
-        this.port_ = url.port_;
+        username_ = url.username_;
+        password_ = url.password_;
+        host_ = url.host_;
+        port_ = url.port_;
     }
 
     void usernamePasswordHostPortPath(final UrlImpl url) {
@@ -850,7 +843,7 @@ public class UrlImpl implements Url {
 
         public String toString() {
             final StringBuilder buffer = new StringBuilder();
-            SerializerHelper.serializeFormUrlEncoded(this.parameters_, utf8Encoder(), buffer);
+            SerializerHelper.serializeFormUrlEncoded(parameters_, utf8Encoder(), buffer);
             return buffer.toString();
         }
 

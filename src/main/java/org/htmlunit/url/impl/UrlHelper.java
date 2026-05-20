@@ -188,19 +188,12 @@ final class UrlHelper {
     }
 
     public static Integer getDefaultSchemePort(final String scheme) {
-        switch (scheme) {
-            case "ftp":
-                return 21;
-            case "http":
-                return 80;
-            case "https":
-                return 443;
-            case "ws":
-                return 80;
-            case "wss":
-                return 443;
-        }
-        return null;
+        return switch (scheme) {
+            case "ftp"          -> 21;
+            case "http", "ws"   -> 80;
+            case "https", "wss" -> 443;
+            default             -> null;
+        };
     }
 
     public static boolean hasAsciiTabOrNewline(final int[] codepoints) {
@@ -355,8 +348,8 @@ final class UrlHelper {
                 value = "";
             }
             // 3.4
-            name = name.replace('=', ' ');
-            value = value.replace('=', ' ');
+            name = name.replace('+', ' ');
+            value = value.replace('+', ' ');
             // 3.5
             name = EncodingHelper.utf8DecodeWithoutBom(percentDecode(name));
             value = EncodingHelper.utf8DecodeWithoutBom(percentDecode(value));

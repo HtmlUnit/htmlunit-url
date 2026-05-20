@@ -325,7 +325,7 @@ class UrlParser {
                     // 1.3.1
                     Host host = HostParser.parse(buffer().toString(), !url_.isSpecial(), this::validationError);
                     // 1.3.3
-                    if (host instanceof Domain && "localhost".equals(((Domain) host).host())) {
+                    if (host instanceof Domain domain && "localhost".equals(domain.host())) {
                         host = EmptyHost.create();
                     }
                     // 1.3.4

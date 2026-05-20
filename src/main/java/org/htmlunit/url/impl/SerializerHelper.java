@@ -254,24 +254,24 @@ public final class SerializerHelper {
     static void serializeHost(final Host host, final StringBuilder output) {
         Objects.requireNonNull(output);
         // 1
-        if (host instanceof Ipv4Address) {
-            serializeHost((Ipv4Address) host, output);
+        if (host instanceof Ipv4Address ipv4Address) {
+            serializeHost(ipv4Address, output);
         }
         // 2
-        else if (host instanceof Ipv6Address) {
+        else if (host instanceof Ipv6Address ipv6Address) {
             output.append("[");
-            serializeHost((Ipv6Address) host, output);
+            serializeHost(ipv6Address, output);
             output.append("]");
         }
         // 3
-        else if (host instanceof Domain) {
-            serializeHost((Domain) host, output);
+        else if (host instanceof Domain domain) {
+            serializeHost(domain, output);
         }
-        else if (host instanceof OpaqueHost) {
-            serializeHost((OpaqueHost) host, output);
+        else if (host instanceof OpaqueHost opaqueHost) {
+            serializeHost(opaqueHost, output);
         }
-        else if (host instanceof EmptyHost) {
-            serializeHost((EmptyHost) host, output);
+        else if (host instanceof EmptyHost emptyHost) {
+            serializeHost(emptyHost, output);
         }
     }
 
@@ -338,14 +338,12 @@ public final class SerializerHelper {
         Objects.requireNonNull(url);
         Objects.requireNonNull(output);
         switch (url.scheme_) {
-            case "blob":
-                // 2
+            case "blob" -> {
                 final StringBuilder serializedPath = new StringBuilder();
                 serializePath(url, serializedPath);
                 try {
                     final UrlImpl pathUrl = new UrlParser()
-                                .basicParse(serializedPath.toString(), null, StandardCharsets.UTF_8);
-                    // 4
+                            .basicParse(serializedPath.toString(), null, StandardCharsets.UTF_8);
                     if ("http".equals(pathUrl.scheme_)
                             || "https".equals(pathUrl.scheme_)
                             || "file".equals(pathUrl.scheme_)) {
@@ -354,18 +352,12 @@ public final class SerializerHelper {
                     }
                 }
                 catch (final Exception e) {
-                    // 3
                     output.append("null");
                     return;
                 }
-                // 5
                 output.append("null");
-                return;
-            case "ftp":
-            case "http":
-            case "https":
-            case "ws":
-            case "wss":
+            }
+            case "ftp", "http", "https", "ws", "wss" -> {
                 output.append(url.scheme_);
                 output.append("://");
                 serializeHost(url.host_, output);
@@ -373,12 +365,8 @@ public final class SerializerHelper {
                     output.append(":");
                     output.append(url.port_);
                 }
-                return;
-            case "file":
-                output.append("null");
-                return;
-            default:
-                output.append("null");
+            }
+            default -> output.append("null");
         }
     }
 
