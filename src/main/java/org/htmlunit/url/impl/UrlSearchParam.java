@@ -16,6 +16,9 @@ package org.htmlunit.url.impl;
 
 import java.util.Objects;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 class UrlSearchParam {
   private final String name;
   private String value;

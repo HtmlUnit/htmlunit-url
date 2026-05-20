@@ -19,6 +19,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 public class SerializerHelper {
 
     static int compress(final short[] ipPieces) {

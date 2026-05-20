@@ -20,6 +20,8 @@ import java.util.function.IntPredicate;
 
 /**
  * This class is a helper to make it easier to deal with codepoints.
+ *
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
  */
 public class Codepoints {
     private int[] codepoints_;

@@ -21,6 +21,9 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 public class EncodingHelper {
     public static CharsetDecoder getDecoder(final Charset charset) {
         return charset.newDecoder().onMalformedInput(CodingErrorAction.REPORT)

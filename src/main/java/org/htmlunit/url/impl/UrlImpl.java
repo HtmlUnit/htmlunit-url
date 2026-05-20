@@ -31,6 +31,9 @@ import org.htmlunit.url.UrlSearchParams;
 import org.htmlunit.url.ValidationError;
 import org.htmlunit.url.impl.UrlParser.State;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 public class UrlImpl implements Url {
     // A URL’s scheme is an ASCII string that identifies the type of URL and can be
     // used to dispatch a

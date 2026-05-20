@@ -14,6 +14,9 @@
  */
 package org.htmlunit.url.impl;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 final class EmptyHost implements Host {
     private static final EmptyHost instance = new EmptyHost();
 

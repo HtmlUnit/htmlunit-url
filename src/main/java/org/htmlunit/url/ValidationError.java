@@ -16,6 +16,9 @@ package org.htmlunit.url;
 
 import java.util.Objects;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 public enum ValidationError {
     // @formatter:off
     DOMAIN_TO_ASCII(

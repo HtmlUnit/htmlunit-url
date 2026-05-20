@@ -16,6 +16,9 @@ package org.htmlunit.url.impl;
 
 import java.util.Objects;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 final class Domain implements Host {
     private final String host_;
 

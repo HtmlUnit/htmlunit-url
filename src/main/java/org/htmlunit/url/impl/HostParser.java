@@ -23,6 +23,9 @@ import java.util.function.Consumer;
 import org.htmlunit.url.ValidationError;
 import org.htmlunit.url.ValidationException;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 public class HostParser {
     /**
      * <pre>

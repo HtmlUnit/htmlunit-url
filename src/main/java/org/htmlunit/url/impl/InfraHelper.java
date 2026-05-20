@@ -27,6 +27,9 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 public class InfraHelper {
     /**
      * To collect a sequence of code points meeting a condition condition from a
@@ -119,7 +122,7 @@ public class InfraHelper {
     /**
      * doEncode is equivalent to processQueue/ProcessItem whose algorithm are
      * described below. It does its job and call the resultHandler whenever <br>
-     * </br/>
+     * <br/>
      * ProcessQueue: To encode an I/O queue of scalar values ioQueue given an
      * encoding encoding and an optional I/O queue of bytes output (default « »),
      * run these steps:
@@ -129,7 +132,7 @@ public class InfraHelper {
      * <li>3) Return output.</li>
      * </ul>
      * <br>
-     * </br/>
+     * <br/>
      * ProcessItem: To process an item given an item item, encoding’s encoder or
      * decoder instance encoderDecoder, I/O queue input, I/O queue output, and error
      * mode mode:
@@ -445,7 +448,6 @@ public class InfraHelper {
      * @return the hexadecimal value as an array of chars
      */
     static char[] toHexChars(final byte value) {
-        final byte unsignedValue = (byte) (value & 0xF);
         return new char[] {Character.toUpperCase(Character.forDigit((value >> 4) & 0xf, 16)),
                 Character.toUpperCase(Character.forDigit(value & 0xf, 16))};
     }

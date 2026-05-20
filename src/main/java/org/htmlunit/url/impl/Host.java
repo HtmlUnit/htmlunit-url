@@ -14,5 +14,8 @@
  */
 package org.htmlunit.url.impl;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 interface Host {
 }

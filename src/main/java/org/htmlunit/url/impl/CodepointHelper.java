@@ -14,26 +14,49 @@
  */
 package org.htmlunit.url.impl;
 
+/**
+ * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ */
 public class CodepointHelper {
-    protected static final int CP_BOF = -2; // NOT IN THE SPEC BUT ADDED FOR CONVENIENCE
+
+    /** Not in the spec but added for convenience. */
+    protected static final int CP_BOF = -2;
+    /** End of file. */
     protected static final int CP_EOF = -1;
-    protected static final int CP_SPACE = 0x0020; //
-    protected static final int CP_QUOTATION_MARK = 0x0022; // "
-    protected static final int CP_HASH = 0x0023; // #
-    protected static final int CP_PERCENT = 0x0025; // %
-    protected static final int CP_APOSTROPHE = 0x0027; // '
-    protected static final int CP_PLUS = 0x002B; // +
-    protected static final int CP_MINUS = 0x002D; // -
-    protected static final int CP_PERIOD = 0x002E; // .
-    protected static final int CP_SLASH = 0x002F; // /
-    protected static final int CP_COLON = 0x003A; // :
-    protected static final int CP_LESS_THAN = 0x003C; // <
-    protected static final int CP_GREATER_THAN = 0x003E; // >
-    protected static final int CP_QUESTION_MARK = 0x003F; // ?
-    protected static final int CP_AT = 0x0040; // @
-    protected static final int CP_LEFT_SQUARE_BRACKET = 0x005B; // [
-    protected static final int CP_BACKSLASH = 0x005C; // \
-    protected static final int CP_RIGHT_SQUARE_BRACKET = 0x005D; // ]
+    /** Space character {@code U+0020}. */
+    protected static final int CP_SPACE = 0x0020;
+    /** Quotation mark {@code "}. */
+    protected static final int CP_QUOTATION_MARK = 0x0022;
+    /** Hash sign {@code #}. */
+    protected static final int CP_HASH = 0x0023;
+    /** Percent sign {@code %}. */
+    protected static final int CP_PERCENT = 0x0025;
+    /** Apostrophe {@code '}. */
+    protected static final int CP_APOSTROPHE = 0x0027;
+    /** Plus sign {@code +}. */
+    protected static final int CP_PLUS = 0x002B;
+    /** Hyphen-minus {@code -}. */
+    protected static final int CP_MINUS = 0x002D;
+    /** Full stop {@code .}. */
+    protected static final int CP_PERIOD = 0x002E;
+    /** Solidus {@code /}. */
+    protected static final int CP_SLASH = 0x002F;
+    /** Colon {@code :}. */
+    protected static final int CP_COLON = 0x003A;
+    /** Less-than sign {@code <}. */
+    protected static final int CP_LESS_THAN = 0x003C;
+    /** Greater-than sign {@code >}. */
+    protected static final int CP_GREATER_THAN = 0x003E;
+    /** Question mark {@code ?}. */
+    protected static final int CP_QUESTION_MARK = 0x003F;
+    /** Commercial at {@code @}. */
+    protected static final int CP_AT = 0x0040;
+    /** Left square bracket {@code [}. */
+    protected static final int CP_LEFT_SQUARE_BRACKET = 0x005B;
+    /** Reverse solidus (backslash) {@code \}. */
+    protected static final int CP_BACKSLASH = 0x005C;
+    /** Right square bracket {@code ]}. */
+    protected static final int CP_RIGHT_SQUARE_BRACKET = 0x005D;
 
     public static boolean hasOnlyAsciiDigit(final String value) {
         if (value != null && !value.isEmpty()) {
