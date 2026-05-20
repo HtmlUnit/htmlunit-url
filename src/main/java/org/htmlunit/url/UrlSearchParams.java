@@ -26,7 +26,8 @@ import java.util.function.BiConsumer;
  * does not provide one. The main reason is that it doesn't seem relevant or
  * appropriate for the java implementation. This may be revisited in the future
  *
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
 public interface UrlSearchParams {
     /**

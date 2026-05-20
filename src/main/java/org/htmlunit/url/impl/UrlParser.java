@@ -29,7 +29,8 @@ import org.htmlunit.url.ValidationException;
  * This is an implementation of the
  * <a href="https://url.spec.whatwg.org/#concept-basic-url-parser">WhatWg basic URL parser</a>.
  *
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
 class UrlParser {
     private static final Logger logger = Logger.getLogger(UrlParser.class.getName());

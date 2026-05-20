@@ -15,7 +15,10 @@
 package org.htmlunit.url.impl;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Represents an empty host as defined by the WHATWG URL Living Standard.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
 final class EmptyHost implements Host {
     private static final EmptyHost instance = new EmptyHost();

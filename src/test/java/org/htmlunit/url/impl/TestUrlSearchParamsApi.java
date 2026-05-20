@@ -19,9 +19,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.htmlunit.url.Url;
+import org.htmlunit.url.UrlSearchParams;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for the {@link UrlSearchParams} API.
+ *
+* @author Stephane Bastian
+* @author Ronald Brill
+ */
 public class TestUrlSearchParamsApi {
   @Test
   public void append() {

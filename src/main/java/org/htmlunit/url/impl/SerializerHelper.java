@@ -20,9 +20,16 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Helper class providing URL serialization utilities as defined by the WHATWG URL Living Standard.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
-public class SerializerHelper {
+public final class SerializerHelper {
+
+    private SerializerHelper() {
+        // utility class
+    }
 
     static int compress(final short[] ipPieces) {
         int result = 0;

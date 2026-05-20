@@ -34,6 +34,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+/**
+ * Tests for the Host API.
+ *
+* @author Stephane Bastian
+* @author Ronald Brill
+ */
 public class TestHost {
     static Collection<Map<String, Object>> invalidIpv4Data() {
         return TestUtils.readJsonFile("ipv4-invalid.json");

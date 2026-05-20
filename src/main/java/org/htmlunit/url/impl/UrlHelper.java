@@ -31,9 +31,17 @@ import org.htmlunit.url.ValidationException;
 import com.ibm.icu.text.IDNA;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Helper class providing miscellaneous URL-processing utilities used by the URL parser.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
-class UrlHelper {
+final class UrlHelper {
+
+    private UrlHelper() {
+        //utility class
+    }
+
     static IDNA uts46NonStrictInstance = IDNA.getUTS46Instance(IDNA.CHECK_BIDI | IDNA.CHECK_CONTEXTJ
             | /* Transitional_Processing set to false */ IDNA.NONTRANSITIONAL_TO_ASCII
             | IDNA.NONTRANSITIONAL_TO_UNICODE);
@@ -41,7 +49,7 @@ class UrlHelper {
             | /* Transitional_Processing set to false */ IDNA.NONTRANSITIONAL_TO_ASCII | IDNA.NONTRANSITIONAL_TO_UNICODE
             | /* strict set to true */ IDNA.USE_STD3_RULES);
 
-    public static int codePoint(CharSequence input, int pointer) {
+    public static int codePoint(final CharSequence input, final int pointer) {
         Objects.requireNonNull(input);
         if (pointer >= 0 && pointer < input.length()) {
             return Character.codePointAt(input, pointer);
@@ -58,7 +66,7 @@ class UrlHelper {
     /**
      *
      */
-    public static int[] codepoints(String value) {
+    public static int[] codepoints(final String value) {
         Objects.requireNonNull(value);
         return value.codePoints().toArray();
     }
@@ -89,7 +97,7 @@ class UrlHelper {
      * @param beStrict a boolean set to true to perform a strict conversion
      * @return the converted value
      */
-    public static String domainToAscii(String domain, boolean beStrict) {
+    public static String domainToAscii(final String domain, final boolean beStrict) {
         // special case for domain with empty labels
         if (".".equals(domain) || "..".equals(domain)) {
             return domain;
@@ -97,15 +105,16 @@ class UrlHelper {
         // 1
         // we've got to use UTR46 from ICU4J otherwise, IDN built-in java choke on some
         // domain names
-        StringBuilder result = new StringBuilder(domain.length());
-        IDNA.Info idnaInfo = new IDNA.Info();
+        final StringBuilder result = new StringBuilder(domain.length());
+        final IDNA.Info idnaInfo = new IDNA.Info();
         if (beStrict) {
             uts46strictInstance.nameToASCII(domain, result, idnaInfo);
-        } else {
+        }
+        else {
             uts46NonStrictInstance.nameToASCII(domain, result, idnaInfo);
         }
         // 2
-        for (IDNA.Error error : idnaInfo.getErrors()) {
+        for (final IDNA.Error error : idnaInfo.getErrors()) {
             // equivalent to checkHyphens==false
             if (IDNA.Error.HYPHEN_3_4.equals(error) || IDNA.Error.LEADING_HYPHEN.equals(error)
                     || IDNA.Error.TRAILING_HYPHEN.equals(error)) {
@@ -150,16 +159,17 @@ class UrlHelper {
      * @param beStrict a boolean set to true to perform a strict conversion
      * @return the converted value
      */
-    public static String domainToUnicode(String domain, boolean beStrict) {
+    public static String domainToUnicode(final String domain, final boolean beStrict) {
         try {
             // 1
             // we've got to use UTR46 from ICU4J otherwise, IDN built-in java choke on some
             // domain names
-            StringBuilder result = new StringBuilder(domain.length());
-            IDNA.Info idnaInfo = new IDNA.Info();
+            final StringBuilder result = new StringBuilder(domain.length());
+            final IDNA.Info idnaInfo = new IDNA.Info();
             if (beStrict) {
                 uts46strictInstance.nameToUnicode(domain, result, idnaInfo);
-            } else {
+            }
+            else {
                 uts46NonStrictInstance.nameToUnicode(domain, result, idnaInfo);
             }
             if (result.length() == 0) {
@@ -167,33 +177,34 @@ class UrlHelper {
             }
             // 4
             return result.toString();
-        } catch (Exception e) {
+        }
+        catch (final Exception e) {
             // 2
             throw new ValidationException(ValidationError.DOMAIN_TO_ASCII);
         }
     }
 
-    public static Integer getDefaultSchemePort(String scheme) {
+    public static Integer getDefaultSchemePort(final String scheme) {
         switch (scheme) {
-        case "ftp":
-            return 21;
-        case "http":
-            return 80;
-        case "https":
-            return 443;
-        case "ws":
-            return 80;
-        case "wss":
-            return 443;
+            case "ftp":
+                return 21;
+            case "http":
+                return 80;
+            case "https":
+                return 443;
+            case "ws":
+                return 80;
+            case "wss":
+                return 443;
         }
         return null;
     }
 
-    public static boolean hasAsciiTabOrNewline(int[] codepoints) {
+    public static boolean hasAsciiTabOrNewline(final int[] codepoints) {
         return numberOfAsciiTabOrNewline(codepoints) > 0;
     }
 
-    public static boolean hasLeadingOrTrailingC0ControlOrSpace(int[] codepoints) {
+    public static boolean hasLeadingOrTrailingC0ControlOrSpace(final int[] codepoints) {
         return codepoints != null && codepoints.length > 0 && (InfraHelper.isC0ControlOrSpace(codepoints[0])
                 || InfraHelper.isC0ControlOrSpace(codepoints[codepoints.length - 1]));
     }
@@ -204,7 +215,7 @@ class UrlHelper {
      *
      * @return
      */
-    public static boolean isDoubleDotPathSegment(CharSequence value) {
+    public static boolean isDoubleDotPathSegment(final CharSequence value) {
         return "..".contentEquals(value) || ".%2e".contentEquals(value) || ".%2E".contentEquals(value)
                 || "%2e.".contentEquals(value) || "%2E.".contentEquals(value) || "%2e%2e".contentEquals(value)
                 || "%2e%2E".contentEquals(value) || "%2E%2e".contentEquals(value) || "%2E%2E".contentEquals(value);
@@ -216,7 +227,7 @@ class UrlHelper {
      *
      * @return
      */
-    public static boolean isNormalizedWindowsDriveLetter(String value) {
+    public static boolean isNormalizedWindowsDriveLetter(final String value) {
         return value.length() == 2 && isWindowsDriveLetter(value, 0) && value.codePointAt(1) == 0x003A;
     }
 
@@ -226,16 +237,16 @@ class UrlHelper {
      *
      * @return
      */
-    public static boolean isSingleDotPathSegment(CharSequence value) {
+    public static boolean isSingleDotPathSegment(final CharSequence value) {
         return ".".contentEquals(value) || "%2e".contentEquals(value) || "%2E".contentEquals(value);
     }
 
-    public static boolean isSpecialScheme(CharSequence scheme) {
+    public static boolean isSpecialScheme(final CharSequence scheme) {
         return "ftp".contentEquals(scheme) || "file".contentEquals(scheme) || "http".contentEquals(scheme)
                 || "https".contentEquals(scheme) || "ws".contentEquals(scheme) || "wss".contentEquals(scheme);
     }
 
-    public static boolean isWindowsDriveLetter(int cp1, int cp2) {
+    public static boolean isWindowsDriveLetter(final int cp1, final int cp2) {
         return InfraHelper.isAsciiAlpha(cp1) && (cp2 == 0x003A || cp2 == 0x007C);
     }
 
@@ -245,7 +256,7 @@ class UrlHelper {
      *
      * @return
      */
-    public static boolean isWindowsDriveLetter(String input, int offset) {
+    public static boolean isWindowsDriveLetter(final String input, final int offset) {
         if (offset + 1 < input.length()) {
             return isWindowsDriveLetter(input.codePointAt(offset), input.codePointAt(offset + 1));
         }
@@ -257,7 +268,8 @@ class UrlHelper {
      * equal to input’s length and whose code points have the same values as input’s
      * bytes, in the same order.
      */
-    public static String isomorphicDecode(byte[] bytes, int offset, int length, Charset charset) {
+    public static String isomorphicDecode(final byte[] bytes, final int offset,
+            final int length, final Charset charset) {
         return new String(bytes, offset, length, charset);
     }
 
@@ -267,7 +279,7 @@ class UrlHelper {
      * @param codepoints the array
      * @return the number of ascii tab and newline
      */
-    public static int numberOfAsciiTabOrNewline(int[] codepoints) {
+    public static int numberOfAsciiTabOrNewline(final int[] codepoints) {
         int result = 0;
         for (int i = 0; i < codepoints.length; i++) {
             if (InfraHelper.isAsciiTabOrNewLine(codepoints[i])) {
@@ -297,13 +309,13 @@ class UrlHelper {
      *   </ul>
      * </pre>
      */
-    public static List<List<String>> parseFormUrlEncoded(String input) {
+    public static List<List<String>> parseFormUrlEncoded(final String input) {
         Objects.requireNonNull(input);
         // 1
-        List<List<String>> output = new ArrayList<>();
+        final List<List<String>> output = new ArrayList<>();
         // 2
-        String[] sequences = input.split("&");
-        for (String sequence : sequences) {
+        final String[] sequences = input.split("&");
+        for (final String sequence : sequences) {
             // 3.1
             if (sequence.isEmpty()) {
                 continue;
@@ -311,7 +323,7 @@ class UrlHelper {
             // 3.2
             String name = null;
             String value = null;
-            int idxOfEqual = sequence.indexOf('=');
+            final int idxOfEqual = sequence.indexOf('=');
             if (idxOfEqual != -1) {
                 name = sequence.substring(0, idxOfEqual);
                 value = sequence.substring(idxOfEqual + 1);
@@ -328,7 +340,7 @@ class UrlHelper {
             name = EncodingHelper.utf8DecodeWithoutBom(percentDecode(name));
             value = EncodingHelper.utf8DecodeWithoutBom(percentDecode(value));
             // 3.6
-            List<String> entry = new ArrayList<>();
+            final List<String> entry = new ArrayList<>();
             entry.add(name);
             entry.add(value);
             output.add(entry);
@@ -363,11 +375,11 @@ class UrlHelper {
      * </ul>
      * </pre>
      */
-    public static byte[] percentDecode(byte[] input) {
+    public static byte[] percentDecode(final byte[] input) {
         // 1
-        ByteArrayOutputStream output = new ByteArrayOutputStream(input.length);
+        final ByteArrayOutputStream output = new ByteArrayOutputStream(input.length);
         // 2
-        int length = input.length;
+        final int length = input.length;
         for (int i = 0; i < length; i++) {
             // 2.1
             if (input[i] != CodepointHelper.CP_PERCENT) {
@@ -376,8 +388,8 @@ class UrlHelper {
             // 2.2
             else if (i + 2 < length && InfraHelper.isAsciiHexDigit(input[i + 1])
                     && InfraHelper.isAsciiHexDigit(input[i + 2])) {
-                String isomorphicDecode = InfraHelper.isomorphicDecode(new byte[] { input[i + 1], input[i + 2] });
-                int bytePoint = Integer.parseInt(isomorphicDecode, 16);
+                final String isomorphicDecode = InfraHelper.isomorphicDecode(new byte[] {input[i + 1], input[i + 2]});
+                final int bytePoint = Integer.parseInt(isomorphicDecode, 16);
                 output.write(bytePoint);
                 i += 2;
             }
@@ -393,7 +405,7 @@ class UrlHelper {
      * To string percent decode a string input, run these steps: 1) Let bytes be the
      * UTF-8 encoding of input. 2) Return the percent decoding of bytes.
      */
-    public static byte[] percentDecode(String input) {
+    public static byte[] percentDecode(final String input) {
         return percentDecode(input.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -404,10 +416,10 @@ class UrlHelper {
      *
      * @param abyte
      */
-    public static String percentEncode(byte abyte) {
+    public static String percentEncode(final byte abyte) {
         // unsigned byte
-        int i = abyte & 0xFF;
-        String result = Integer.toHexString(i).toUpperCase();
+        final int i = abyte & 0xFF;
+        final String result = Integer.toHexString(i).toUpperCase();
         if (result.length() == 1) {
             // make sure the result is always 2 digits
             return "%0" + result;
@@ -422,15 +434,15 @@ class UrlHelper {
      * @param abyte
      * @param result
      */
-    public static void percentEncode(byte abyte, ByteArrayOutputStream result) {
+    public static void percentEncode(final byte abyte, final ByteArrayOutputStream result) {
         result.write('%');
-        char[] hexChars = InfraHelper.toHexChars(abyte);
+        final char[] hexChars = InfraHelper.toHexChars(abyte);
         result.write(hexChars[0]);
         result.write(hexChars[1]);
     }
 
-    public static String percentEncodeAfterEncoding(CharsetEncoder encoder, int codepoint, IntPredicate isInEncodeSet,
-            boolean spaceAsPlus) {
+    public static String percentEncodeAfterEncoding(final CharsetEncoder encoder,
+            final int codepoint, final IntPredicate isInEncodeSet, final boolean spaceAsPlus) {
         return percentEncodeAfterEncoding(encoder, new String(Character.toChars(codepoint)), isInEncodeSet,
                 spaceAsPlus);
     }
@@ -470,17 +482,17 @@ class UrlHelper {
      *   </ul>
      * </pre>
      */
-    public static String percentEncodeAfterEncoding(CharsetEncoder encoder, CharSequence input,
-            IntPredicate isInEncodeSet, boolean spaceAsPlus) {
+    public static String percentEncodeAfterEncoding(final CharsetEncoder encoder, final CharSequence input,
+            final IntPredicate isInEncodeSet, final boolean spaceAsPlus) {
         // early out
         if (input.length() == 0) {
             return "";
         }
         // 1
         // 2
-        CharBuffer inputBuffer = CharBuffer.wrap(input);
+        final CharBuffer inputBuffer = CharBuffer.wrap(input);
         // 3
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
         // 4
         int potentialError = 0;
         // 5
@@ -490,13 +502,14 @@ class UrlHelper {
             potentialError = InfraHelper.encodeOrFail(encoder, inputBuffer, encodingResult -> {
                 // 5.3
                 for (int i = 0; i < encodingResult.limit(); i++) {
-                    byte aByte = encodingResult.get(i);
+                    final byte aByte = encodingResult.get(i);
                     // 5.3.1
                     if (spaceAsPlus && aByte == CodepointHelper.CP_SPACE) {
                         output.write(CodepointHelper.CP_PLUS);
-                    } else {
+                    }
+                    else {
                         // 5.3.2
-                        int isomorph = InfraHelper.getIsomorphInt(aByte);
+                        final int isomorph = InfraHelper.getIsomorphInt(aByte);
                         // 5.3.3
                         // 5.3.4
                         if (!isInEncodeSet.test(isomorph)) {
@@ -517,7 +530,7 @@ class UrlHelper {
                 output.write('%');
                 output.write('2');
                 output.write('3');
-                String asciiError = Integer.toString(potentialError, 10);
+                final String asciiError = Integer.toString(potentialError, 10);
                 for (int i = 0; i < asciiError.length(); i++) {
                     output.write(asciiError.charAt(i));
                 }
@@ -529,12 +542,12 @@ class UrlHelper {
         return output.toString();
     }
 
-    public static boolean remainingMatch(String input, int pointer, int numberOfCodepointsToMatch,
-            BiPredicate<Integer, Integer> predicate) {
+    public static boolean remainingMatch(final String input, final int pointer,
+            final int numberOfCodepointsToMatch, final BiPredicate<Integer, Integer> predicate) {
         if (numberOfCodepointsToMatch > 0 && pointer + numberOfCodepointsToMatch < input.length()) {
             for (int i = 0; i < numberOfCodepointsToMatch; i++) {
-                int codepoint = input.codePointAt(pointer + 1 + i);
-                boolean result = predicate.test(i, codepoint);
+                final int codepoint = input.codePointAt(pointer + 1 + i);
+                final boolean result = predicate.test(i, codepoint);
                 if (!result) {
                     return false;
                 }
@@ -544,9 +557,9 @@ class UrlHelper {
         return false;
     }
 
-    public static int[] removeAsciiTabAndNewline(int[] codepoints) {
-        int numberOfAsciiTabOrNewline = numberOfAsciiTabOrNewline(codepoints);
-        int[] result = new int[codepoints.length - numberOfAsciiTabOrNewline];
+    public static int[] removeAsciiTabAndNewline(final int[] codepoints) {
+        final int numberOfAsciiTabOrNewline = numberOfAsciiTabOrNewline(codepoints);
+        final int[] result = new int[codepoints.length - numberOfAsciiTabOrNewline];
         for (int i = 0, j = 0; i < codepoints.length; i++) {
             if (!InfraHelper.isAsciiTabOrNewLine(codepoints[i])) {
                 result[j++] = codepoints[i];
@@ -555,12 +568,13 @@ class UrlHelper {
         return result;
     }
 
-    public static int[] removeLeadingOrTrailingC0ControlOrSpace(int[] codepoints) {
+    public static int[] removeLeadingOrTrailingC0ControlOrSpace(final int[] codepoints) {
         int nbrOfLeading = 0;
         for (int i = 0; i < codepoints.length; i++) {
             if (InfraHelper.isC0ControlOrSpace(codepoints[i])) {
                 nbrOfLeading++;
-            } else {
+            }
+            else {
                 break;
             }
         }
@@ -568,13 +582,14 @@ class UrlHelper {
         for (int i = codepoints.length - 1; i >= nbrOfLeading; i--) {
             if (InfraHelper.isC0ControlOrSpace(codepoints[i])) {
                 nbrOfTrailing++;
-            } else {
+            }
+            else {
                 break;
             }
         }
         if (nbrOfLeading > 0 || nbrOfTrailing > 0) {
-            int newLength = codepoints.length - nbrOfLeading - nbrOfTrailing;
-            int[] result = new int[newLength];
+            final int newLength = codepoints.length - nbrOfLeading - nbrOfTrailing;
+            final int[] result = new int[newLength];
             System.arraycopy(codepoints, nbrOfLeading, result, 0, newLength);
             return result;
         }
@@ -589,27 +604,27 @@ class UrlHelper {
      *
      * @return
      */
-    public static boolean startsWithWindowsDriveLetter(Codepoints input) {
+    public static boolean startsWithWindowsDriveLetter(final Codepoints input) {
         Objects.requireNonNull(input);
-        int remaining = input.remaining();
-        int cp1 = input.codepointAt(input.pointer());
-        int cp2 = input.codepointAt(input.pointer() + 1);
-        int cp3 = input.codepointAt(input.pointer() + 2);
+        final int remaining = input.remaining();
+        final int cp1 = input.codepointAt(input.pointer());
+        final int cp2 = input.codepointAt(input.pointer() + 1);
+        final int cp3 = input.codepointAt(input.pointer() + 2);
         return remaining >= 2 && UrlHelper.isWindowsDriveLetter(cp1, cp2)
                 && (remaining == 2
                         || (remaining > 2 && (cp3 == CodepointHelper.CP_SLASH || cp3 == CodepointHelper.CP_BACKSLASH
                                 || cp3 == CodepointHelper.CP_QUESTION_MARK || cp3 == CodepointHelper.CP_HASH)));
     }
 
-    public static String utf8PercentEncode(CharSequence input, IntPredicate isInPercentEncodeSet) {
+    public static String utf8PercentEncode(final CharSequence input, final IntPredicate isInPercentEncodeSet) {
         return utf8PercentEncode(StandardCharsets.UTF_8.newEncoder(), input, isInPercentEncodeSet);
     }
 
-    public static String utf8PercentEncode(CharsetEncoder utf8Encoder, CharSequence input,
-            IntPredicate isInPercentEncodeSet) {
-        StringBuilder result = new StringBuilder(input.length());
+    public static String utf8PercentEncode(final CharsetEncoder utf8Encoder, final CharSequence input,
+            final IntPredicate isInPercentEncodeSet) {
+        final StringBuilder result = new StringBuilder(input.length());
         for (int i = 0; i < input.length(); i++) {
-            int codePoint = Character.codePointAt(input, i);
+            final int codePoint = Character.codePointAt(input, i);
             result.append(utf8PercentEncode(utf8Encoder, codePoint, isInPercentEncodeSet));
         }
         return result.toString();
@@ -624,8 +639,8 @@ class UrlHelper {
      * @param codepoint the codepoint to encode
      * @return the percent encoded value
      */
-    public static String utf8PercentEncode(CharsetEncoder utf8Encoder, int codepoint,
-            IntPredicate isInPercentEncodeSet) {
+    public static String utf8PercentEncode(final CharsetEncoder utf8Encoder, final int codepoint,
+            final IntPredicate isInPercentEncodeSet) {
         return percentEncodeAfterEncoding(utf8Encoder, codepoint, isInPercentEncodeSet, false);
     }
 }

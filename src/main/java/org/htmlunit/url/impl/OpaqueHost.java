@@ -17,7 +17,10 @@ package org.htmlunit.url.impl;
 import java.util.Objects;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Represents an opaque host as defined by the WHATWG URL Living Standard.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
 final class OpaqueHost implements Host {
     private String host_;

@@ -15,9 +15,12 @@
 package org.htmlunit.url.impl;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Helper class providing constants and predicates for URL-relevant Unicode code points.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
-public class CodepointHelper {
+public final class CodepointHelper {
 
     /** Not in the spec but added for convenience. */
     protected static final int CP_BOF = -2;
@@ -57,6 +60,10 @@ public class CodepointHelper {
     protected static final int CP_BACKSLASH = 0x005C;
     /** Right square bracket {@code ]}. */
     protected static final int CP_RIGHT_SQUARE_BRACKET = 0x005D;
+
+    private CodepointHelper() {
+        // utility class
+    }
 
     public static boolean hasOnlyAsciiDigit(final String value) {
         if (value != null && !value.isEmpty()) {

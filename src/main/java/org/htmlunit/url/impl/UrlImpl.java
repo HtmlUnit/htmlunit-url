@@ -32,7 +32,10 @@ import org.htmlunit.url.ValidationError;
 import org.htmlunit.url.impl.UrlParser.State;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Implementation of the {@link org.htmlunit.url.Url} interface following the WHATWG URL Living Standard.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
 public class UrlImpl implements Url {
     // A URL’s scheme is an ASCII string that identifies the type of URL and can be

@@ -15,7 +15,10 @@
 package org.htmlunit.url.impl;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Marker interface for the different host types supported by the WHATWG URL Living Standard.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
 interface Host {
 }

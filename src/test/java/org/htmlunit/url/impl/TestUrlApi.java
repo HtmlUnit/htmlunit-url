@@ -20,6 +20,12 @@ import org.htmlunit.url.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for the {@link Url} API.
+ *
+* @author Stephane Bastian
+* @author Ronald Brill
+ */
 public class TestUrlApi {
     @Test
     public void createEmptyUrl() {

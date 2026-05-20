@@ -17,7 +17,10 @@ package org.htmlunit.url;
 import java.util.Objects;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Exception thrown when the URL parser encounters a fatal validation error.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
 public class ValidationException extends RuntimeException {
     private final ValidationError validationError_;

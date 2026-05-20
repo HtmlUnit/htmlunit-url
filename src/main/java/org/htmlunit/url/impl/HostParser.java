@@ -24,9 +24,17 @@ import org.htmlunit.url.ValidationError;
 import org.htmlunit.url.ValidationException;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Implementation of the host parser as defined by the WHATWG URL Living Standard.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
-public class HostParser {
+public final class HostParser {
+
+    private HostParser() {
+        // utility class
+    }
+
     /**
      * <pre>
      * The ends in a number checker takes an ASCII string input and then runs
@@ -457,7 +465,7 @@ public class HostParser {
      * </pre>
      *
      * @param input the string value to parse as an ipv6 address
-     * @return
+     * @return the {@link Ipv6Address}
      */
     static Ipv6Address parseIpv6(final String input) {
         // 1

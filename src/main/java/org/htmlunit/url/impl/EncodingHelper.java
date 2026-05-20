@@ -22,9 +22,17 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Helper class providing encoding and decoding utilities used during URL processing.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
-public class EncodingHelper {
+public final class EncodingHelper {
+
+    private EncodingHelper() {
+        // utility class
+    }
+
     public static CharsetDecoder getDecoder(final Charset charset) {
         return charset.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
                 .onUnmappableCharacter(CodingErrorAction.REPORT);

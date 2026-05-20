@@ -28,9 +28,17 @@ import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 
 /**
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * Helper class providing utilities for the Infra Living Standard primitives used during URL processing.
+ *
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
-public class InfraHelper {
+public final class InfraHelper {
+
+    private InfraHelper() {
+        // utility class
+    }
+
     /**
      * To collect a sequence of code points meeting a condition condition from a
      * string input, given a position variable position tracking the position of the
@@ -342,8 +350,8 @@ public class InfraHelper {
      * A C0 control is a code point in the range U+0000 NULL to U+001F INFORMATION
      * SEPARATOR ONE, inclusive.
      *
-     * @param codepoint
-     * @return
+     * @param codepoint the codepoint
+     * @return true or false
      */
     static boolean isC0Control(final int codepoint) {
         return codepoint >= 0x0000 && codepoint <= 0x001F;

@@ -36,7 +36,8 @@ import org.htmlunit.url.impl.UrlImpl;
  * error})</li>
  * </ul>
  *
- * @author <a href="mail://stephane.bastian.dev@gmail.com">Stephane Bastian</a>
+ * @author Stephane Bastian
+ * @author Ronald Brill
  */
 public interface Url {
     /**
