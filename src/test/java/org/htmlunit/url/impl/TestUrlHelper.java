@@ -24,6 +24,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+/**
+ * Tests for the {@link UrlHelper}.
+ *
+* @author Stephane Bastian
+* @author Ronald Brill
+ */
 public class TestUrlHelper {
     static Collection<Map<String, Object>> percentEncodeAfterEncodingWhatWgTestData() {
         Collection<Object> result = TestUtils.readJsonFile("percent-encoding.json");

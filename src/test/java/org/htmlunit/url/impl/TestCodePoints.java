@@ -20,6 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for the {@link Codepoints}.
+ *
+* @author Stephane Bastian
+* @author Ronald Brill
+ */
 public class TestCodePoints {
 
     @Test

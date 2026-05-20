@@ -119,7 +119,7 @@ public class UrlImpl implements Url {
      * A URL cannot have a username/password/port if its host is null or the empty
      * string, or its scheme is "file".
      *
-     * @return
+     * @return true or false
      */
     boolean canNotHaveUsernamePasswordHost() {
         return host_ == null || ("".equals(host_.toString())) || "file".contentEquals(scheme_);

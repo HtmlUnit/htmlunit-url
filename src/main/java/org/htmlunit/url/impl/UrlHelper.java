@@ -42,10 +42,10 @@ final class UrlHelper {
         //utility class
     }
 
-    static IDNA uts46NonStrictInstance = IDNA.getUTS46Instance(IDNA.CHECK_BIDI | IDNA.CHECK_CONTEXTJ
+    private static IDNA UTS46NonStrictInstance_ = IDNA.getUTS46Instance(IDNA.CHECK_BIDI | IDNA.CHECK_CONTEXTJ
             | /* Transitional_Processing set to false */ IDNA.NONTRANSITIONAL_TO_ASCII
             | IDNA.NONTRANSITIONAL_TO_UNICODE);
-    static IDNA uts46strictInstance = IDNA.getUTS46Instance(IDNA.CHECK_BIDI | IDNA.CHECK_CONTEXTJ
+    private static IDNA UTS46strictInstance_ = IDNA.getUTS46Instance(IDNA.CHECK_BIDI | IDNA.CHECK_CONTEXTJ
             | /* Transitional_Processing set to false */ IDNA.NONTRANSITIONAL_TO_ASCII | IDNA.NONTRANSITIONAL_TO_UNICODE
             | /* strict set to true */ IDNA.USE_STD3_RULES);
 
@@ -64,7 +64,10 @@ final class UrlHelper {
     }
 
     /**
+     * Returns the codepoints of the given string as an int array.
      *
+     * @param value the string to convert
+     * @return an int array of Unicode code points
      */
     public static int[] codepoints(final String value) {
         Objects.requireNonNull(value);
@@ -108,10 +111,10 @@ final class UrlHelper {
         final StringBuilder result = new StringBuilder(domain.length());
         final IDNA.Info idnaInfo = new IDNA.Info();
         if (beStrict) {
-            uts46strictInstance.nameToASCII(domain, result, idnaInfo);
+            UTS46strictInstance_.nameToASCII(domain, result, idnaInfo);
         }
         else {
-            uts46NonStrictInstance.nameToASCII(domain, result, idnaInfo);
+            UTS46NonStrictInstance_.nameToASCII(domain, result, idnaInfo);
         }
         // 2
         for (final IDNA.Error error : idnaInfo.getErrors()) {
@@ -167,10 +170,10 @@ final class UrlHelper {
             final StringBuilder result = new StringBuilder(domain.length());
             final IDNA.Info idnaInfo = new IDNA.Info();
             if (beStrict) {
-                uts46strictInstance.nameToUnicode(domain, result, idnaInfo);
+                UTS46strictInstance_.nameToUnicode(domain, result, idnaInfo);
             }
             else {
-                uts46NonStrictInstance.nameToUnicode(domain, result, idnaInfo);
+                UTS46NonStrictInstance_.nameToUnicode(domain, result, idnaInfo);
             }
             if (result.length() == 0) {
                 throw new ValidationException(ValidationError.DOMAIN_TO_ASCII);
@@ -213,7 +216,8 @@ final class UrlHelper {
      * A double-dot path segment must be ".." or an ASCII case-insensitive match for
      * ".%2e", "%2e.", or "%2e%2e".
      *
-     * @return
+     * @param value the path segment to check
+     * @return true if the value is a double-dot path segment, false otherwise
      */
     public static boolean isDoubleDotPathSegment(final CharSequence value) {
         return "..".contentEquals(value) || ".%2e".contentEquals(value) || ".%2E".contentEquals(value)
@@ -225,7 +229,8 @@ final class UrlHelper {
      * A normalized Windows drive letter is a Windows drive letter of which the
      * second code point is U+003A (:).
      *
-     * @return
+     * @param value the string to check
+     * @return true if the value is a normalized Windows drive letter, false otherwise
      */
     public static boolean isNormalizedWindowsDriveLetter(final String value) {
         return value.length() == 2 && isWindowsDriveLetter(value, 0) && value.codePointAt(1) == 0x003A;
@@ -235,7 +240,8 @@ final class UrlHelper {
      * A single-dot path segment must be "." or an ASCII case-insensitive match for
      * "%2e".
      *
-     * @return
+     * @param value the path segment to check
+     * @return true if the value is a single-dot path segment, false otherwise
      */
     public static boolean isSingleDotPathSegment(final CharSequence value) {
         return ".".contentEquals(value) || "%2e".contentEquals(value) || "%2E".contentEquals(value);
@@ -254,7 +260,9 @@ final class UrlHelper {
      * A Windows drive letter is two code points, of which the first is an ASCII
      * alpha and the second is either U+003A (:) or U+007C (|).
      *
-     * @return
+     * @param input  the string to check
+     * @param offset the offset in the string at which to start checking
+     * @return true if the two code points at offset form a Windows drive letter, false otherwise
      */
     public static boolean isWindowsDriveLetter(final String input, final int offset) {
         if (offset + 1 < input.length()) {
@@ -265,8 +273,14 @@ final class UrlHelper {
 
     /**
      * To isomorphic decode a byte sequence input, return a string whose length is
-     * equal to input’s length and whose code points have the same values as input’s
+     * equal to input's length and whose code points have the same values as input's
      * bytes, in the same order.
+     *
+     * @param bytes   the byte array to decode
+     * @param offset  the start offset within the array
+     * @param length  the number of bytes to decode
+     * @param charset the charset to use for decoding
+     * @return the decoded string
      */
     public static String isomorphicDecode(final byte[] bytes, final int offset,
             final int length, final Charset charset) {
@@ -274,10 +288,10 @@ final class UrlHelper {
     }
 
     /**
-     * return the number of asciiTab and newline in the given codepoints array
+     * Returns the number of ASCII tab and newline code points in the given array.
      *
-     * @param codepoints the array
-     * @return the number of ascii tab and newline
+     * @param codepoints the array to inspect
+     * @return the number of ASCII tab and newline code points
      */
     public static int numberOfAsciiTabOrNewline(final int[] codepoints) {
         int result = 0;
@@ -298,16 +312,23 @@ final class UrlHelper {
      *     <li>3) For each byte sequence bytes in sequences:
      *       <ul>
      *         <li>3.1) If bytes is the empty byte sequence, then continue.</li>
-     *         <li>3.2) If bytes contains a 0x3D (=), then let name be the bytes from the start of bytes up to but excluding its first 0x3D (=), and let value be the bytes, if any, after the first 0x3D (=) up to the end of bytes. If 0x3D (=) is the first byte, then name will be the empty byte sequence. If it is the last, then value will be the empty byte sequence.</li>
+     *         <li>3.2) If bytes contains a 0x3D (=), then let name be the bytes from the start of bytes up to but
+     *         excluding its first 0x3D (=), and let value be the bytes, if any, after the first 0x3D (=) up to the
+     *         end of bytes. If 0x3D (=) is the first byte, then name will be the empty byte sequence. If it is the
+     *         last, then value will be the empty byte sequence.</li>
      *         <li>3.3) Otherwise, let name have the value of bytes and let value be the empty byte sequence.</li>
      *         <li>3.4) Replace any 0x2B (+) in name and value with 0x20 (SP).</li>
-     *         <li>3.5) Let nameString and valueString be the result of running UTF-8 decode without BOM on the percent-decoding of name and value, respectively.</li>
+     *         <li>3.5) Let nameString and valueString be the result of running UTF-8 decode without BOM on the
+     *         percent-decoding of name and value, respectively.</li>
      *         <li>3.6) Append (nameString, valueString) to output.</li>
      *       </ul>
      *     </li>
      *     <li>4) Return output.</li>
      *   </ul>
      * </pre>
+     *
+     * @param input the application/x-www-form-urlencoded string to parse
+     * @return a list of name-value string pairs
      */
     public static List<List<String>> parseFormUrlEncoded(final String input) {
         Objects.requireNonNull(input);
@@ -374,6 +395,9 @@ final class UrlHelper {
      *   <li>3) Return output.</li>
      * </ul>
      * </pre>
+     *
+     * @param input the byte sequence to percent-decode
+     * @return the decoded byte sequence
      */
     public static byte[] percentDecode(final byte[] input) {
         // 1
@@ -402,19 +426,23 @@ final class UrlHelper {
     }
 
     /**
-     * To string percent decode a string input, run these steps: 1) Let bytes be the
-     * UTF-8 encoding of input. 2) Return the percent decoding of bytes.
+     * To string percent decode a string input, run these steps:
+     * 1) Let bytes be the UTF-8 encoding of input.
+     * 2) Return the percent decoding of bytes.
+     *
+     * @param input the string to percent-decode
+     * @return the decoded byte sequence
      */
     public static byte[] percentDecode(final String input) {
         return percentDecode(input.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
-     * To percent encode a byte into a percent-encoded byte, return a string
-     * consisting of U+0025 (%), followed by two ASCII upper hex digits representing
-     * byte.
+     * To percent-encode a byte, return a string consisting of U+0025 (%), followed
+     * by two ASCII upper hex digits representing the byte.
      *
-     * @param abyte
+     * @param abyte the byte to percent-encode
+     * @return the percent-encoded string (e.g. {@code "%2F"})
      */
     public static String percentEncode(final byte abyte) {
         // unsigned byte
@@ -428,11 +456,11 @@ final class UrlHelper {
     }
 
     /**
-     * To percent-encode a byte byte, return a string consisting of U+0025 (%),
-     * followed by two ASCII upper hex digits representing byte.
+     * To percent-encode a byte, write U+0025 (%) followed by two ASCII upper hex
+     * digits representing the byte into the given output stream.
      *
-     * @param abyte
-     * @param result
+     * @param abyte  the byte to percent-encode
+     * @param result the output stream to write the percent-encoded bytes into
      */
     public static void percentEncode(final byte abyte, final ByteArrayOutputStream result) {
         result.write('%');
@@ -462,17 +490,19 @@ final class UrlHelper {
      *     <li>5) While potentialError is non-null:
      *       <ul>
      *         <li>5.1) Let encodeOutput be an empty I/O queue.</li>
-     *         <li>5.2) Set potentialError to the result of running encode or fail with inputQueue, encoder, and encodeOutput.</li>
+     *         <li>5.2) Set potentialError to the result of running encode or fail with inputQueue, encoder,
+     *         and encodeOutput.</li>
      *         <li>5.3) For each byte of encodeOutput converted to a byte sequence:
      *           <ul>
-     *             <li>5.3.1) If spaceAsPlus is true and byte is 0x20 (SP), then append U+002B (+) to output and continue.</li>
-     *             <li>5
+     *             <li>5.3.1) If spaceAsPlus is true and byte is 0x20 (SP), then append U+002B (+) to output
+     *             and continue.</li>
      *             <li>5.3.3) Assert: percentEncodeSet includes all non-ASCII code points.</li>
      *             <li>5.3.4) If isomorph is not in percentEncodeSet, then append isomorph to output.</li>
      *             <li>5.3.5) Otherwise, percent-encode byte and append the result to output.</li>
      *           </ul>
      *         </li>
-     *         <li>5.4) If potentialError is non-null, then append "%26%23", followed by the shortest sequence of ASCII digits representing potentialError in base ten, followed by "%3B", to output.
+     *         <li>5.4) If potentialError is non-null, then append "%26%23", followed by the shortest sequence
+     *         of ASCII digits representing potentialError in base ten, followed by "%3B", to output.
      *           <br>
      *           <br>This can happen when encoding is not UTF-8.
      *         </li>
@@ -481,6 +511,12 @@ final class UrlHelper {
      *     <li>6) Return output.</li>
      *   </ul>
      * </pre>
+     *
+     * @param encoder        the charset encoder to use
+     * @param input          the scalar value string to encode
+     * @param isInEncodeSet  predicate that returns true if a code point must be percent-encoded
+     * @param spaceAsPlus    if true, encode U+0020 SPACE as {@code +} instead of {@code %20}
+     * @return the percent-encoded string
      */
     public static String percentEncodeAfterEncoding(final CharsetEncoder encoder, final CharSequence input,
             final IntPredicate isInEncodeSet, final boolean spaceAsPlus) {
@@ -598,11 +634,12 @@ final class UrlHelper {
 
     /**
      * A string starts with a Windows drive letter if all of the following are true:
-     * - its length is greater than or equal to 2 - its first two code points are a
-     * Windows drive letter - its length is 2 or its third code point is U+002F (/),
+     * its length is greater than or equal to 2, its first two code points are a
+     * Windows drive letter, and its length is 2 or its third code point is U+002F (/),
      * U+005C (\), U+003F (?), or U+0023 (#).
      *
-     * @return
+     * @param input the codepoints to check
+     * @return true if the input starts with a Windows drive letter, false otherwise
      */
     public static boolean startsWithWindowsDriveLetter(final Codepoints input) {
         Objects.requireNonNull(input);
@@ -635,9 +672,10 @@ final class UrlHelper {
      * return the result of running percent-encode after encoding with UTF-8,
      * scalarValue as a string, and percentEncodeSet.
      *
-     * @param codepoint the codepoint to encode
-     * @param codepoint the codepoint to encode
-     * @return the percent encoded value
+     * @param utf8Encoder          the UTF-8 charset encoder to use
+     * @param codepoint            the Unicode code point to encode
+     * @param isInPercentEncodeSet predicate that returns true if a code point must be percent-encoded
+     * @return the percent-encoded string representation of the code point
      */
     public static String utf8PercentEncode(final CharsetEncoder utf8Encoder, final int codepoint,
             final IntPredicate isInPercentEncodeSet) {

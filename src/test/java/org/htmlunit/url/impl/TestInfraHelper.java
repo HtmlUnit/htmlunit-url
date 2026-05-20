@@ -19,6 +19,12 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for the {@link InfraHelper}.
+ *
+* @author Stephane Bastian
+* @author Ronald Brill
+ */
 public class TestInfraHelper {
 
     @Test

@@ -24,6 +24,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+/**
+ * Tests for the {@link Url}.
+ *
+* @author Stephane Bastian
+* @author Ronald Brill
+ */
 public class TestUrl {
 
     private static void assertUrlProperties(Url url, Map<String, String> expectedProperties) {
