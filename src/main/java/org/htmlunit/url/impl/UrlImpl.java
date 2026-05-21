@@ -153,8 +153,7 @@ public class UrlImpl implements Url {
      * <li>1) If the given value is the empty string:
      * <ul>
      * <li>1.1) Set this’s URL’s fragment to null.</li>
-     * <li>1.2) Potentially strip trailing spaces from an opaque path with
-     * this.</li>
+     * <li>1.2) Potentially strip trailing spaces from an opaque path with this.</li>
      * <li>1.3) Return.</li>
      * </ul>
      * </li>

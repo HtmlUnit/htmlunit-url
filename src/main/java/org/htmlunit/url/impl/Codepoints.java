@@ -103,7 +103,7 @@ public class Codepoints {
     }
 
     void pointer(final int position) {
-        this.pointer_ = position;
+       pointer_ = position;
     }
 
     int remaining() {

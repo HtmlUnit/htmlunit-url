@@ -191,11 +191,11 @@ class UrlParser {
         // (basically where
         // surrogates have been replaced)
         codepoints = InfraHelper.toScalarCodepoints(codepoints);
-        this.base_ = base;
+        base_ = base;
         // 1
         if (url == null) {
             // 1.1
-            this.url_ = new UrlImpl();
+            url_ = new UrlImpl();
             // 1.2
             if (UrlHelper.hasLeadingOrTrailingC0ControlOrSpace(codepoints)) {
                 validationError(ValidationError.INVALID_URL_UNIT);
@@ -204,7 +204,7 @@ class UrlParser {
             }
         }
         else {
-            this.url_ = url;
+            url_ = url;
         }
         // 2
         if (UrlHelper.hasAsciiTabOrNewline(codepoints)) {
@@ -213,21 +213,21 @@ class UrlParser {
             codepoints = UrlHelper.removeAsciiTabAndNewline(codepoints);
         }
         // 4
-        this.stateOverride_ = stateOverride;
+        stateOverride_ = stateOverride;
         state(stateOverride != null ? stateOverride : State.SCHEME_START);
         // 5
-        this.encoding_ = encoding == null ? StandardCharsets.UTF_8 : InfraHelper.getOutputEncoding(encoding);
+        encoding_ = encoding == null ? StandardCharsets.UTF_8 : InfraHelper.getOutputEncoding(encoding);
         // 6
-        this.buffer_ = new StringBuilder(codepoints.length);
+        buffer_ = new StringBuilder(codepoints.length);
         // 7
-        this.atSignSeenFlag_ = false;
-        this.insideBracketsFlag_ = false;
-        this.passwordTokenSeenFlag_ = false;
+        atSignSeenFlag_ = false;
+        insideBracketsFlag_ = false;
+        passwordTokenSeenFlag_ = false;
         // 8
-        this.input_ = new Codepoints(codepoints);
+        input_ = new Codepoints(codepoints);
         // 9
         stateMachine();
-        return this.url_;
+        return url_;
     }
 
     /**
@@ -1491,7 +1491,7 @@ class UrlParser {
     }
 
     protected void state(final State state) {
-        this.state_ = Objects.requireNonNull(state);
+        state_ = Objects.requireNonNull(state);
     }
 
     protected void stateMachine() {
