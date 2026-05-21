@@ -612,9 +612,7 @@ public class UrlImpl implements Url {
         if ("file".equals(scheme_) && path_.size() == 1 && UrlHelper.isNormalizedWindowsDriveLetter(path_.get(0))) {
             return;
         }
-        if (!path_.isEmpty()) {
-            path_.remove(path_.size() - 1);
-        }
+        path_.remove(path_.size() - 1);
     }
 
     @Override

@@ -23,43 +23,57 @@ package org.htmlunit.url.impl;
 public final class CodepointHelper {
 
     /** Not in the spec but added for convenience. */
-    protected static final int CP_BOF = -2;
+    static final int CP_BOF = -2;
     /** End of file. */
-    protected static final int CP_EOF = -1;
+    static final int CP_EOF = -1;
+    /** Null character {@code U+0000}. */
+    static final int CP_NULL = 0x0000;
+    /** Character tabulation {@code U+0009}. */
+    static final int CP_TAB = 0x0009;
+    /** Line feed {@code U+000A}. */
+    static final int CP_LF = 0x000A;
+    /** Carriage return {@code U+000D}. */
+    static final int CP_CR = 0x000D;
     /** Space character {@code U+0020}. */
-    protected static final int CP_SPACE = 0x0020;
+    static final int CP_SPACE = 0x0020;
     /** Quotation mark {@code "}. */
-    protected static final int CP_QUOTATION_MARK = 0x0022;
+    static final int CP_QUOTATION_MARK = 0x0022;
     /** Hash sign {@code #}. */
-    protected static final int CP_HASH = 0x0023;
+    static final int CP_HASH = 0x0023;
     /** Percent sign {@code %}. */
-    protected static final int CP_PERCENT = 0x0025;
+    static final int CP_PERCENT = 0x0025;
     /** Apostrophe {@code '}. */
-    protected static final int CP_APOSTROPHE = 0x0027;
+    static final int CP_APOSTROPHE = 0x0027;
     /** Plus sign {@code +}. */
-    protected static final int CP_PLUS = 0x002B;
+    static final int CP_PLUS = 0x002B;
     /** Hyphen-minus {@code -}. */
-    protected static final int CP_MINUS = 0x002D;
+    static final int CP_MINUS = 0x002D;
     /** Full stop {@code .}. */
-    protected static final int CP_PERIOD = 0x002E;
+    static final int CP_PERIOD = 0x002E;
     /** Solidus {@code /}. */
-    protected static final int CP_SLASH = 0x002F;
+    static final int CP_SLASH = 0x002F;
     /** Colon {@code :}. */
-    protected static final int CP_COLON = 0x003A;
+    static final int CP_COLON = 0x003A;
     /** Less-than sign {@code <}. */
-    protected static final int CP_LESS_THAN = 0x003C;
+    static final int CP_LESS_THAN = 0x003C;
     /** Greater-than sign {@code >}. */
-    protected static final int CP_GREATER_THAN = 0x003E;
+    static final int CP_GREATER_THAN = 0x003E;
     /** Question mark {@code ?}. */
-    protected static final int CP_QUESTION_MARK = 0x003F;
+    static final int CP_QUESTION_MARK = 0x003F;
     /** Commercial at {@code @}. */
-    protected static final int CP_AT = 0x0040;
+    static final int CP_AT = 0x0040;
     /** Left square bracket {@code [}. */
-    protected static final int CP_LEFT_SQUARE_BRACKET = 0x005B;
+    static final int CP_LEFT_SQUARE_BRACKET = 0x005B;
     /** Reverse solidus (backslash) {@code \}. */
-    protected static final int CP_BACKSLASH = 0x005C;
+    static final int CP_BACKSLASH = 0x005C;
     /** Right square bracket {@code ]}. */
-    protected static final int CP_RIGHT_SQUARE_BRACKET = 0x005D;
+    static final int CP_RIGHT_SQUARE_BRACKET = 0x005D;
+    /** Circumflex accent (caret) {@code ^}. */
+    static final int CP_CARET = 0x005E;
+    /** Delete {@code U+007F}. */
+    static final int CP_DELETE = 0x007F;
+    /** Vertical line (pipe) {@code |}. */
+    static final int CP_PIPE = 0x007C;
 
     private CodepointHelper() {
         // utility class
@@ -87,8 +101,10 @@ public final class CodepointHelper {
      * @return true if the codepoint is forbidden for domains, false otherwise
      */
     public static boolean isForbiddenDomainCodePoint(final int codepoint) {
-        return isForbiddenHostCodePoint(codepoint) || InfraHelper.isC0Control(codepoint)
-                || codepoint == CodepointHelper.CP_PERCENT || codepoint == 0x007F;
+        return isForbiddenHostCodePoint(codepoint)
+                || InfraHelper.isC0Control(codepoint)
+                || codepoint == CP_PERCENT
+                || codepoint == CP_DELETE;
     }
 
     /**
@@ -103,11 +119,23 @@ public final class CodepointHelper {
      * @return true if the codepoint is forbidden for hosts, false otherwise
      */
     public static boolean isForbiddenHostCodePoint(final int codepoint) {
-        return codepoint == 0x0000 || codepoint == 0x0009 || codepoint == 0x000A || codepoint == 0x000D
-                || codepoint == 0x0020 || codepoint == 0x0023 || codepoint == 0x002F || codepoint == 0x003A
-                || codepoint == 0x003C || codepoint == 0x003E || codepoint == 0x003F || codepoint == 0x0040
-                || codepoint == 0x005B || codepoint == 0x005C || codepoint == 0x005D || codepoint == 0x005E
-                || codepoint == 0x007C;
+        return codepoint == CP_NULL
+                || codepoint == CP_TAB
+                || codepoint == CP_LF
+                || codepoint == CP_CR
+                || codepoint == CP_SPACE
+                || codepoint == CP_HASH
+                || codepoint == CP_SLASH
+                || codepoint == CP_COLON
+                || codepoint == CP_LESS_THAN
+                || codepoint == CP_GREATER_THAN
+                || codepoint == CP_QUESTION_MARK
+                || codepoint == CP_AT
+                || codepoint == CP_LEFT_SQUARE_BRACKET
+                || codepoint == CP_BACKSLASH
+                || codepoint == CP_RIGHT_SQUARE_BRACKET
+                || codepoint == CP_CARET
+                || codepoint == CP_PIPE;
     }
 
     /**
@@ -144,9 +172,12 @@ public final class CodepointHelper {
      *         otherwise
      */
     public static boolean isInFragmentPercentEncodeSet(final int codepoint) {
-        return isInC0ControlPercentEncodeSet(codepoint) || codepoint == CodepointHelper.CP_SPACE
-                || codepoint == CodepointHelper.CP_QUOTATION_MARK || codepoint == CodepointHelper.CP_LESS_THAN
-                || codepoint == CodepointHelper.CP_GREATER_THAN || codepoint == 0x0060; /* ' */
+        return isInC0ControlPercentEncodeSet(codepoint)
+                || codepoint == CodepointHelper.CP_SPACE
+                || codepoint == CodepointHelper.CP_QUOTATION_MARK
+                || codepoint == CodepointHelper.CP_LESS_THAN
+                || codepoint == CodepointHelper.CP_GREATER_THAN
+                || codepoint == 0x0060; /* ` */
     }
 
     /**
@@ -254,12 +285,29 @@ public final class CodepointHelper {
      * @return true if the codepoint is a Url codepoint, false otherwise
      */
     public static boolean isUrlCodepoint(final int codepoint) {
-        return InfraHelper.isAsciiAlphanumeric(codepoint) || codepoint == 0x0021 || codepoint == 0x0024
-                || codepoint == 0x0026 || codepoint == 0x0027 || codepoint == 0x0028 || codepoint == 0x0029
-                || codepoint == 0x002A || codepoint == 0x002B || codepoint == 0x002C || codepoint == 0x002D
-                || codepoint == 0x002E || codepoint == 0x002F || codepoint == 0x003A || codepoint == 0x003B
-                || codepoint == 0x003D || codepoint == 0x003F || codepoint == 0x0040 || codepoint == 0x005F
-                || codepoint == 0x007E || (codepoint > 0x00A0 && codepoint < 0x10FFFD
-                        && !InfraHelper.isSurrogate(codepoint) && !isNonCharacter(codepoint));
+        return InfraHelper.isAsciiAlphanumeric(codepoint)
+                || codepoint == 0x0021                      /* ! */
+                || codepoint == 0x0024                      /* $ */
+                || codepoint == 0x0026                      /* & */
+                || codepoint == CP_APOSTROPHE               /* ' */
+                || codepoint == 0x0028                      /* ( */
+                || codepoint == 0x0029                      /* ) */
+                || codepoint == 0x002A                      /* * */
+                || codepoint == CP_PLUS                     /* + */
+                || codepoint == 0x002C                      /* , */
+                || codepoint == CP_MINUS                    /* - */
+                || codepoint == CP_PERIOD                   /* . */
+                || codepoint == CP_SLASH                    /* / */
+                || codepoint == CP_COLON                    /* : */
+                || codepoint == 0x003B                      /* ; */
+                || codepoint == 0x003D                      /* = */
+                || codepoint == CP_QUESTION_MARK            /* ? */
+                || codepoint == CP_AT                       /* @ */
+                || codepoint == 0x005F                      /* _ */
+                || codepoint == 0x007E                      /* ~ */
+                || (codepoint >= 0x00A0                     /* U+00A0 to U+10FFFD inclusive */
+                        && codepoint <= 0x10FFFD
+                        && !InfraHelper.isSurrogate(codepoint)
+                        && !isNonCharacter(codepoint));
     }
 }

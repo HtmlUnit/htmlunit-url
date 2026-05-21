@@ -668,18 +668,6 @@ class UrlParser {
         return hostState();
     }
 
-    protected boolean isEmptyHost(final Host value) {
-        return value instanceof EmptyHost;
-    }
-
-    protected boolean isNotSpecialScheme(final CharSequence scheme) {
-        return !isSpecialScheme(scheme);
-    }
-
-    protected boolean isSpecialScheme(final CharSequence scheme) {
-        return UrlHelper.isSpecialScheme(scheme);
-    }
-
     protected void logInfo() {
         logger.log(Level.FINER,
                 () -> "codePoint: " + input_.codepoint() + " - char: "
@@ -1355,11 +1343,11 @@ class UrlParser {
             // 2.1
             if (stateOverride_ != null) {
                 // 2.1.1
-                if (url_.isSpecial() && isNotSpecialScheme(buffer())) {
+                if (url_.isSpecial() && !UrlHelper.isSpecialScheme(buffer())) {
                     return StateReturnType.RETURN;
                 }
                 // 2.1.2
-                if (!url_.isSpecial() && isSpecialScheme(buffer())) {
+                if (!url_.isSpecial() && UrlHelper.isSpecialScheme(buffer())) {
                     return StateReturnType.RETURN;
                 }
                 // 2.1.3
@@ -1367,7 +1355,7 @@ class UrlParser {
                     return StateReturnType.RETURN;
                 }
                 // 2.1.4
-                if ("file".equals(url_.scheme_) && isEmptyHost(url_.host_)) {
+                if ("file".equals(url_.scheme_) && url_.host_ instanceof EmptyHost) {
                     return StateReturnType.RETURN;
                 }
             }
