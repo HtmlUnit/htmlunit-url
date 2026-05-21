@@ -85,7 +85,7 @@ final class UrlHelper {
      *     CheckBidi set to true,
      *     CheckJoiners set to true,
      *     Transitional_Processing set to false,
-     *     and VerifyDnsLength set to beStrict. [UTS46]</li>
+     *     and VerifyDnsLength set to beStrict. [UTS46]
      *     <br>
      *     <br>If beStrict is false, domain is an ASCII string, and strictly splitting
      *     domain on U+002E (.) does not produce any item that starts with an ASCII
