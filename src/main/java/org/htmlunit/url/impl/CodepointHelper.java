@@ -36,16 +36,30 @@ public final class CodepointHelper {
     static final int CP_CR = 0x000D;
     /** Space character {@code U+0020}. */
     static final int CP_SPACE = 0x0020;
+    /** Exclamation mark {@code !}. */
+    static final int CP_EXCLAMATION_MARK = 0x0021;
     /** Quotation mark {@code "}. */
     static final int CP_QUOTATION_MARK = 0x0022;
     /** Hash sign {@code #}. */
     static final int CP_HASH = 0x0023;
+    /** Dollar sign {@code $}. */
+    static final int CP_DOLLAR = 0x0024;
     /** Percent sign {@code %}. */
     static final int CP_PERCENT = 0x0025;
+    /** Ampersand {@code &}. */
+    static final int CP_AMPERSAND = 0x0026;
     /** Apostrophe {@code '}. */
     static final int CP_APOSTROPHE = 0x0027;
+    /** Left parenthesis {@code (}. */
+    static final int CP_LEFT_PARENTHESIS = 0x0028;
+    /** Right parenthesis {@code )}. */
+    static final int CP_RIGHT_PARENTHESIS = 0x0029;
+    /** Asterisk {@code *}. */
+    static final int CP_ASTERISK = 0x002A;
     /** Plus sign {@code +}. */
     static final int CP_PLUS = 0x002B;
+    /** Comma {@code ,}. */
+    static final int CP_COMMA = 0x002C;
     /** Hyphen-minus {@code -}. */
     static final int CP_MINUS = 0x002D;
     /** Full stop {@code .}. */
@@ -54,8 +68,12 @@ public final class CodepointHelper {
     static final int CP_SLASH = 0x002F;
     /** Colon {@code :}. */
     static final int CP_COLON = 0x003A;
+    /** Semicolon {@code ;}. */
+    static final int CP_SEMICOLON = 0x003B;
     /** Less-than sign {@code <}. */
     static final int CP_LESS_THAN = 0x003C;
+    /** Equals sign {@code =}. */
+    static final int CP_EQUALS = 0x003D;
     /** Greater-than sign {@code >}. */
     static final int CP_GREATER_THAN = 0x003E;
     /** Question mark {@code ?}. */
@@ -70,38 +88,21 @@ public final class CodepointHelper {
     static final int CP_RIGHT_SQUARE_BRACKET = 0x005D;
     /** Circumflex accent (caret) {@code ^}. */
     static final int CP_CARET = 0x005E;
-    /** Delete {@code U+007F}. */
-    static final int CP_DELETE = 0x007F;
-    /** Vertical line (pipe) {@code |}. */
-    static final int CP_PIPE = 0x007C;
-    /** Exclamation mark {@code !}. */
-    static final int CP_EXCLAMATION_MARK = 0x0021;
-    /** Dollar sign {@code $}. */
-    static final int CP_DOLLAR = 0x0024;
-    /** Ampersand {@code &}. */
-    static final int CP_AMPERSAND = 0x0026;
-    /** Left parenthesis {@code (}. */
-    static final int CP_LEFT_PARENTHESIS = 0x0028;
-    /** Right parenthesis {@code )}. */
-    static final int CP_RIGHT_PARENTHESIS = 0x0029;
-    /** Asterisk {@code *}. */
-    static final int CP_ASTERISK = 0x002A;
-    /** Comma {@code ,}. */
-    static final int CP_COMMA = 0x002C;
-    /** Semicolon {@code ;}. */
-    static final int CP_SEMICOLON = 0x003B;
-    /** Equals sign {@code =}. */
-    static final int CP_EQUALS = 0x003D;
     /** Low line (underscore) {@code _}. */
     static final int CP_UNDERSCORE = 0x005F;
     /** Grave accent {@code `}. */
     static final int CP_GRAVE_ACCENT = 0x0060;
     /** Left curly bracket {. */
     static final int CP_LEFT_CURLY_BRACKET = 0x007B;
+    /** Vertical line (pipe) {@code |}. */
+    static final int CP_PIPE = 0x007C;
     /** Right curly bracket {@code }}. */
     static final int CP_RIGHT_CURLY_BRACKET = 0x007D;
     /** Tilde {@code ~}. */
     static final int CP_TILDE = 0x007E;
+    /** Delete {@code U+007F}. */
+    static final int CP_DELETE = 0x007F;
+
     private CodepointHelper() {
         // utility class
     }
@@ -298,9 +299,12 @@ public final class CodepointHelper {
      *         otherwise
      */
     public static boolean isQueryPercentEncodeSet(final int codepoint) {
-        return isInC0ControlPercentEncodeSet(codepoint) || codepoint == CodepointHelper.CP_SPACE
-                || codepoint == CodepointHelper.CP_QUOTATION_MARK || codepoint == CodepointHelper.CP_HASH
-                || codepoint == CodepointHelper.CP_LESS_THAN || codepoint == CodepointHelper.CP_GREATER_THAN;
+        return isInC0ControlPercentEncodeSet(codepoint)
+                || codepoint == CP_SPACE
+                || codepoint == CP_QUOTATION_MARK
+                || codepoint == CP_HASH
+                || codepoint == CP_LESS_THAN
+                || codepoint == CodepointHelper.CP_GREATER_THAN;
     }
 
     /**
@@ -312,9 +316,20 @@ public final class CodepointHelper {
      *         false otherwise
      */
     public static boolean isSpecialQueryPercentEncodeSet(final int codepoint) {
-        return isQueryPercentEncodeSet(codepoint) || codepoint == CodepointHelper.CP_APOSTROPHE;
+        return isQueryPercentEncodeSet(codepoint) || codepoint == CP_APOSTROPHE;
     }
 
+    /**
+     * The URL code points are ASCII alphanumeric, U+0021 (!), U+0024 ($), U+0026
+     * (&amp;), U+0027 ('), U+0028 LEFT PARENTHESIS, U+0029 RIGHT PARENTHESIS,
+     * U+002A (*), U+002B (+), U+002C (,), U+002D (-), U+002E (.), U+002F (/),
+     * U+003A (:), U+003B (;), U+003D (=), U+003F (?), U+0040 (@), U+005F (_),
+     * U+007E (~), and code points in the range U+00A0 to U+10FFFD, inclusive,
+     * excluding surrogates and noncharacters.
+     *
+     * @param codepoint the codepoint to test
+     * @return true if the codepoint is a URL code point, false otherwise
+     */
     public static boolean isUrlCodepoint(final int codepoint) {
         return InfraHelper.isAsciiAlphanumeric(codepoint)
                 || codepoint == CP_EXCLAMATION_MARK

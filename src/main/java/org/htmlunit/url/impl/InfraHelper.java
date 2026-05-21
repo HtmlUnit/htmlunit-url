@@ -352,8 +352,8 @@ public final class InfraHelper {
      * A C0 control is a code point in the range U+0000 NULL to U+001F INFORMATION
      * SEPARATOR ONE, inclusive.
      *
-     * @param codepoint the codepoint
-     * @return true or false
+     * @param codepoint the codepoint to test
+     * @return true if the codepoint is a C0 control, false otherwise
      */
     static boolean isC0Control(final int codepoint) {
         return codepoint >= 0x0000 && codepoint <= 0x001F;
@@ -367,7 +367,7 @@ public final class InfraHelper {
     // U+009F APPLICATION
     // PROGRAM COMMAND, inclusive.
     public static boolean isControl(final int codepoint) {
-        return isC0Control(codepoint) || (codepoint >= 0x007F && codepoint <= 0x009F);
+        return isC0Control(codepoint) || (codepoint >= CodepointHelper.CP_DELETE && codepoint <= 0x009F);
     }
 
     public static boolean isScalarValue(final int codepoint) {
