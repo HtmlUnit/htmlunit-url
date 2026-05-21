@@ -33,11 +33,25 @@ public final class EncodingHelper {
         // utility class
     }
 
+    /**
+     * Creates a {@link CharsetDecoder} for the given charset configured to report
+     * both malformed-input and unmappable-character errors.
+     *
+     * @param charset the charset to create a decoder for
+     * @return the configured {@link CharsetDecoder}
+     */
     public static CharsetDecoder getDecoder(final Charset charset) {
         return charset.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
                 .onUnmappableCharacter(CodingErrorAction.REPORT);
     }
 
+    /**
+     * Creates a {@link CharsetEncoder} for the given charset configured to report
+     * both malformed-input and unmappable-character errors.
+     *
+     * @param charset the charset to create an encoder for
+     * @return the configured {@link CharsetEncoder}
+     */
     public static CharsetEncoder getEncoder(final Charset charset) {
         return charset.newEncoder().onMalformedInput(CodingErrorAction.REPORT)
                 .onUnmappableCharacter(CodingErrorAction.REPORT);
@@ -45,14 +59,14 @@ public final class EncodingHelper {
 
     /**
      * To UTF-8 decode without BOM an I/O queue of bytes ioQueue given an optional
-     * I/O queue of scalar values output (default « »), run these steps:
+     * I/O queue of scalar values output (default &laquo; &raquo;), run these steps:
      * <ul>
-     * <li>1) Process a queue with an instance of UTF-8’s decoder, ioQueue, output,
+     * <li>1) Process a queue with an instance of UTF-8's decoder, ioQueue, output,
      * and "replacement".</li>
      * <li>2) Return output.</li>
      * </ul>
      *
-     * @param input the input to decode
+     * @param input the byte sequence to decode
      * @return the decoded input as a string
      */
     public static String utf8DecodeWithoutBom(final byte[] input) {

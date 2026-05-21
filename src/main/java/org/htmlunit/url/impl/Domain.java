@@ -29,14 +29,31 @@ final class Domain implements Host {
         host_ = Objects.requireNonNull(host);
     }
 
-    public static Domain create(final String host) {
+    /**
+     * Creates a new {@link Domain} for the given host string.
+     *
+     * @param host the domain host string; must not be null
+     * @return a new {@link Domain} instance
+     */
+    static Domain create(final String host) {
         return new Domain(host);
     }
 
-    public String host() {
+    /**
+     * Returns the domain host string.
+     *
+     * @return the domain host string
+     */
+    String host() {
         return host_;
     }
 
+    /**
+     * Returns the domain host string.
+     *
+     * @return the domain host string
+     */
+    @Override
     public String toString() {
         return host_;
     }

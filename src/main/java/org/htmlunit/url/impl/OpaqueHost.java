@@ -23,20 +23,37 @@ import java.util.Objects;
  * @author Ronald Brill
  */
 final class OpaqueHost implements Host {
-    private String host_;
+    private final String host_;
 
     private OpaqueHost(final String host) {
         host_ = Objects.requireNonNull(host);
     }
 
-    public static OpaqueHost create(final String host) {
+    /**
+     * Creates a new {@link OpaqueHost} for the given host string.
+     *
+     * @param host the opaque host string; must not be null
+     * @return a new {@link OpaqueHost} instance
+     */
+    static OpaqueHost create(final String host) {
         return new OpaqueHost(host);
     }
 
-    public String host() {
+    /**
+     * Returns the opaque host string.
+     *
+     * @return the opaque host string
+     */
+    String host() {
         return host_;
     }
 
+    /**
+     * Returns the opaque host string.
+     *
+     * @return the opaque host string
+     */
+    @Override
     public String toString() {
         return host_;
     }

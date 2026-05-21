@@ -21,15 +21,26 @@ package org.htmlunit.url.impl;
  * @author Ronald Brill
  */
 final class EmptyHost implements Host {
-    private static final EmptyHost instance = new EmptyHost();
+    private static final EmptyHost INSTANCE = new EmptyHost();
 
     private EmptyHost() {
     }
 
-    public static EmptyHost create() {
-        return instance;
+    /**
+     * Returns the singleton {@link EmptyHost} instance.
+     *
+     * @return the singleton {@link EmptyHost} instance
+     */
+    static EmptyHost create() {
+        return INSTANCE;
     }
 
+    /**
+     * Returns an empty string, as an empty host has no host value.
+     *
+     * @return an empty string
+     */
+    @Override
     public String toString() {
         return "";
     }

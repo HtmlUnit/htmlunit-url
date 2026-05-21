@@ -26,20 +26,41 @@ class UrlSearchParam {
     private final String name_;
     private String value_;
 
+    /**
+     * Creates a new name-value search parameter pair.
+     *
+     * @param name  the parameter name; must not be null
+     * @param value the parameter value
+     */
     UrlSearchParam(final String name, final String value) {
         name_ = Objects.requireNonNull(name);
         value_ = value;
     }
 
-    public String name() {
+    /**
+     * Returns the parameter name.
+     *
+     * @return the parameter name
+     */
+    String name() {
         return name_;
     }
 
-    public String value() {
+    /**
+     * Returns the parameter value.
+     *
+     * @return the parameter value
+     */
+    String value() {
         return value_;
     }
 
-    public void value(final String value) {
+    /**
+     * Sets the parameter value.
+     *
+     * @param value the new parameter value
+     */
+    void value(final String value) {
         value_ = value;
     }
 }
