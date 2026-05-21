@@ -179,6 +179,13 @@ class UrlParser {
      *     points to the EOF code point, go to the next step. Otherwise, increase pointer by 1 and
      *     continue with the state machine.</li>
      * </ul>
+     *
+     * @param input         the scalar value string to parse
+     * @param base          the optional base URL (may be null)
+     * @param encoding      the optional encoding override (defaults to UTF-8 when null)
+     * @param url           the optional URL to modify in place (a new URL is created when null)
+     * @param stateOverride the optional state override (scheme start state is used when null)
+     * @return the parsed or modified URL
      */
     public UrlImpl basicParse(final String input, final UrlImpl base,
             final Charset encoding, final UrlImpl url, final State stateOverride) {
@@ -188,8 +195,7 @@ class UrlParser {
         // easier to deal with the codepoint array than using String
         int[] codepoints = input.codePoints().toArray();
         // note that the spec indicates that basicParse takes a scalar value String
-        // (basically where
-        // surrogates have been replaced)
+        // (basically where surrogates have been replaced)
         codepoints = InfraHelper.toScalarCodepoints(codepoints);
         base_ = base;
         // 1
@@ -245,6 +251,11 @@ class UrlParser {
      *     return failure, and null otherwise.</li>
      * <li>Return url.</li>
      * </ol>
+     *
+     * @param input   the scalar value string to parse
+     * @param baseUrl the optional base URL (may be null)
+     * @param encoding the optional encoding override (defaults to UTF-8 when null)
+     * @return the parsed URL
      */
     public UrlImpl basicParse(final String input, final UrlImpl baseUrl, final Charset encoding) {
         return basicParse(input, baseUrl, encoding, null, null);
@@ -916,7 +927,7 @@ class UrlParser {
                 || (url_.isSpecial() && input_.codepointIs(CodepointHelper.CP_BACKSLASH)) || (stateOverride_ == null
                         && (input_.codepointIsOneOf(CodepointHelper.CP_QUESTION_MARK, CodepointHelper.CP_HASH)))) {
             // 1.1
-            if (url_.isSpecial() && input_.codepointIs(CodepointHelper.CP_BACKSLASH) /* \ */) {
+            if (url_.isSpecial() && input_.codepointIs(CodepointHelper.CP_BACKSLASH)) {
                 validationError(ValidationError.INVALID_REVERSE_SOLIDUS);
             }
             // 1.2
