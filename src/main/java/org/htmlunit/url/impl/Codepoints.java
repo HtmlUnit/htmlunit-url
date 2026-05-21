@@ -24,17 +24,17 @@ import java.util.function.IntPredicate;
  * @author Stephane Bastian
  * @author Ronald Brill
  */
-public class Codepoints {
-    private int[] codepoints_;
+class Codepoints {
+    private final int[] codepoints_;
     private int pointer_;
 
-    public Codepoints(final String value) {
+    Codepoints(final String value) {
         Objects.requireNonNull(value);
         codepoints_ = value.codePoints().toArray();
         pointer_ = 0;
     }
 
-    public Codepoints(final int[] codepoints) {
+    Codepoints(final int[] codepoints) {
         codepoints_ = Objects.requireNonNull(codepoints);
         pointer_ = 0;
     }

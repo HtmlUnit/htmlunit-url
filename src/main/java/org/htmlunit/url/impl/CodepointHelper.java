@@ -74,7 +74,34 @@ public final class CodepointHelper {
     static final int CP_DELETE = 0x007F;
     /** Vertical line (pipe) {@code |}. */
     static final int CP_PIPE = 0x007C;
-
+    /** Exclamation mark {@code !}. */
+    static final int CP_EXCLAMATION_MARK = 0x0021;
+    /** Dollar sign {@code $}. */
+    static final int CP_DOLLAR = 0x0024;
+    /** Ampersand {@code &}. */
+    static final int CP_AMPERSAND = 0x0026;
+    /** Left parenthesis {@code (}. */
+    static final int CP_LEFT_PARENTHESIS = 0x0028;
+    /** Right parenthesis {@code )}. */
+    static final int CP_RIGHT_PARENTHESIS = 0x0029;
+    /** Asterisk {@code *}. */
+    static final int CP_ASTERISK = 0x002A;
+    /** Comma {@code ,}. */
+    static final int CP_COMMA = 0x002C;
+    /** Semicolon {@code ;}. */
+    static final int CP_SEMICOLON = 0x003B;
+    /** Equals sign {@code =}. */
+    static final int CP_EQUALS = 0x003D;
+    /** Low line (underscore) {@code _}. */
+    static final int CP_UNDERSCORE = 0x005F;
+    /** Grave accent {@code `}. */
+    static final int CP_GRAVE_ACCENT = 0x0060;
+    /** Left curly bracket {. */
+    static final int CP_LEFT_CURLY_BRACKET = 0x007B;
+    /** Right curly bracket {@code }}. */
+    static final int CP_RIGHT_CURLY_BRACKET = 0x007D;
+    /** Tilde {@code ~}. */
+    static final int CP_TILDE = 0x007E;
     private CodepointHelper() {
         // utility class
     }
@@ -147,7 +174,7 @@ public final class CodepointHelper {
      *         otherwise
      */
     public static boolean isInC0ControlPercentEncodeSet(final int codepoint) {
-        return InfraHelper.isC0Control(codepoint) || codepoint > 0x007E;
+        return InfraHelper.isC0Control(codepoint) || codepoint > CP_TILDE;
     }
 
     /**
@@ -159,8 +186,12 @@ public final class CodepointHelper {
      *         otherwise
      */
     public static boolean isInComponentPercentEncodeSet(final int codepoint) {
-        return isInUserInfoPercentEncodeSet(codepoint) || codepoint == 0x0024 || codepoint == 0x0025
-                || codepoint == 0x0026 || codepoint == 0x002B || codepoint == 0x002C;
+        return isInUserInfoPercentEncodeSet(codepoint)
+                || codepoint == CP_DOLLAR
+                || codepoint == CP_PERCENT
+                || codepoint == CP_AMPERSAND
+                || codepoint == CP_PLUS
+                || codepoint == CP_COMMA;
     }
 
     /**
@@ -173,11 +204,11 @@ public final class CodepointHelper {
      */
     public static boolean isInFragmentPercentEncodeSet(final int codepoint) {
         return isInC0ControlPercentEncodeSet(codepoint)
-                || codepoint == CodepointHelper.CP_SPACE
-                || codepoint == CodepointHelper.CP_QUOTATION_MARK
-                || codepoint == CodepointHelper.CP_LESS_THAN
-                || codepoint == CodepointHelper.CP_GREATER_THAN
-                || codepoint == 0x0060; /* ` */
+                || codepoint == CP_SPACE
+                || codepoint == CP_QUOTATION_MARK
+                || codepoint == CP_LESS_THAN
+                || codepoint == CP_GREATER_THAN
+                || codepoint == CP_GRAVE_ACCENT; /* ` */
     }
 
     /**
@@ -189,9 +220,11 @@ public final class CodepointHelper {
      *         otherwise
      */
     public static boolean isInPathPercentEncodeSet(final int codepoint) {
-        return isQueryPercentEncodeSet(codepoint) || codepoint == CodepointHelper.CP_QUESTION_MARK
-                || codepoint == 0x0060 || codepoint == 0x007B /* { */
-                || codepoint == 0x007D; /* } */
+        return isQueryPercentEncodeSet(codepoint)
+                || codepoint == CP_QUESTION_MARK
+                || codepoint == CP_GRAVE_ACCENT
+                || codepoint == CP_LEFT_CURLY_BRACKET
+                || codepoint == CP_RIGHT_CURLY_BRACKET;
     }
 
     /**
@@ -204,10 +237,17 @@ public final class CodepointHelper {
      *         otherwise
      */
     public static boolean isInUserInfoPercentEncodeSet(final int codepoint) {
-        return isInPathPercentEncodeSet(codepoint) || codepoint == 0x002F /* / */
-                || codepoint == 0x003A /* : */ || codepoint == 0x003B /* ; */ || codepoint == 0x003D /* = */
-                || codepoint == 0x0040 /* @ */ || codepoint == 0x005B /* [ */ || codepoint == 0x005C /* \ */
-                || codepoint == 0x005D /* ] */ || codepoint == 0x005E /* ^ */ || codepoint == 0x007C; /* | */
+        return isInPathPercentEncodeSet(codepoint)
+                || codepoint == CP_SLASH
+                || codepoint == CP_COLON
+                || codepoint == CP_SEMICOLON
+                || codepoint == CP_EQUALS
+                || codepoint == CP_AT
+                || codepoint == CP_LEFT_SQUARE_BRACKET
+                || codepoint == CP_BACKSLASH
+                || codepoint == CP_RIGHT_SQUARE_BRACKET
+                || codepoint == CP_CARET
+                || codepoint == CP_PIPE;
     }
 
     /**
@@ -220,8 +260,10 @@ public final class CodepointHelper {
      *         otherwise
      */
     public static boolean isInUrlEncodedPercentEncodeSet(final int codepoint) {
-        return isInComponentPercentEncodeSet(codepoint) || codepoint == 0x0021
-                || (codepoint >= 0x0027 && codepoint <= 0x0029) || codepoint == 0x007E;
+        return isInComponentPercentEncodeSet(codepoint)
+                || codepoint == CP_EXCLAMATION_MARK
+                || (codepoint >= CP_APOSTROPHE && codepoint <= CP_RIGHT_PARENTHESIS)
+                || codepoint == CP_TILDE;
     }
 
     /**
@@ -273,39 +315,28 @@ public final class CodepointHelper {
         return isQueryPercentEncodeSet(codepoint) || codepoint == CodepointHelper.CP_APOSTROPHE;
     }
 
-    /**
-     * The URL code points are ASCII alphanumeric, U+0021 (!), U+0024 ($), U+0026
-     * (&amp;), U+0027 ('), U+0028 LEFT PARENTHESIS, U+0029 RIGHT PARENTHESIS,
-     * U+002A (*), U+002B (+), U+002C (,), U+002D (-), U+002E (.), U+002F (/),
-     * U+003A (:), U+003B (;), U+003D (=), U+003F (?), U+0040 (@), U+005F (_),
-     * U+007E (~), and code points in the range U+00A0 to U+10FFFD, inclusive,
-     * excluding surrogates and noncharacters.
-     *
-     * @param codepoint the codepoint to test
-     * @return true if the codepoint is a Url codepoint, false otherwise
-     */
     public static boolean isUrlCodepoint(final int codepoint) {
         return InfraHelper.isAsciiAlphanumeric(codepoint)
-                || codepoint == 0x0021                      /* ! */
-                || codepoint == 0x0024                      /* $ */
-                || codepoint == 0x0026                      /* & */
-                || codepoint == CP_APOSTROPHE               /* ' */
-                || codepoint == 0x0028                      /* ( */
-                || codepoint == 0x0029                      /* ) */
-                || codepoint == 0x002A                      /* * */
-                || codepoint == CP_PLUS                     /* + */
-                || codepoint == 0x002C                      /* , */
-                || codepoint == CP_MINUS                    /* - */
-                || codepoint == CP_PERIOD                   /* . */
-                || codepoint == CP_SLASH                    /* / */
-                || codepoint == CP_COLON                    /* : */
-                || codepoint == 0x003B                      /* ; */
-                || codepoint == 0x003D                      /* = */
-                || codepoint == CP_QUESTION_MARK            /* ? */
-                || codepoint == CP_AT                       /* @ */
-                || codepoint == 0x005F                      /* _ */
-                || codepoint == 0x007E                      /* ~ */
-                || (codepoint >= 0x00A0                     /* U+00A0 to U+10FFFD inclusive */
+                || codepoint == CP_EXCLAMATION_MARK
+                || codepoint == CP_DOLLAR
+                || codepoint == CP_AMPERSAND
+                || codepoint == CP_APOSTROPHE
+                || codepoint == CP_LEFT_PARENTHESIS
+                || codepoint == CP_RIGHT_PARENTHESIS
+                || codepoint == CP_ASTERISK
+                || codepoint == CP_PLUS
+                || codepoint == CP_COMMA
+                || codepoint == CP_MINUS
+                || codepoint == CP_PERIOD
+                || codepoint == CP_SLASH
+                || codepoint == CP_COLON
+                || codepoint == CP_SEMICOLON
+                || codepoint == CP_EQUALS
+                || codepoint == CP_QUESTION_MARK
+                || codepoint == CP_AT
+                || codepoint == CP_UNDERSCORE
+                || codepoint == CP_TILDE
+                || (codepoint >= 0x00A0                 /* U+00A0 to U+10FFFD inclusive */
                         && codepoint <= 0x10FFFD
                         && !InfraHelper.isSurrogate(codepoint)
                         && !isNonCharacter(codepoint));

@@ -330,7 +330,9 @@ public final class InfraHelper {
 
     // An ASCII tab
     public static boolean isAsciiTabOrNewLine(final int codepoint) {
-        return codepoint == 0x009 || codepoint == 0x00A || codepoint == 0x00D;
+        return codepoint == CodepointHelper.CP_TAB
+                || codepoint == CodepointHelper.CP_LF
+                || codepoint == CodepointHelper.CP_CR;
     }
 
     // An ASCII upper alpha is a code point in the range U+0041 (A) to U+005A (Z),
@@ -358,7 +360,7 @@ public final class InfraHelper {
     }
 
     public static boolean isC0ControlOrSpace(final int codepoint) {
-        return isC0Control(codepoint) || codepoint == 0x0020;
+        return isC0Control(codepoint) || codepoint == CodepointHelper.CP_SPACE;
     }
 
     // A control is a C0 control or a code point in the range U+007F DELETE to
